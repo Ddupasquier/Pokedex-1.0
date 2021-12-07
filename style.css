@@ -6,7 +6,7 @@ html, body {
 .container {
     background-color: rgb(135, 158, 222);
     display: grid;
-    grid-template-columns: 10em 200px auto;
+    grid-template-columns: 125px auto;
     grid-template-rows: 100px auto 100px;
     gap: 0px;
     max-width: 100rem;
@@ -21,14 +21,18 @@ html, body {
     border-width: 1px;
 }
 
-.nav {
-    grid-row: auto / span 3;
+.header {
+    grid-column: auto / span 3;
 }
 
-.header {
+.main2 {
     grid-column: auto / span 2;
 }
+
+/* .main2 {
+
+} */
 
 .footer {
-    grid-column: auto / span 2;
+    grid-column: auto / span 3;
 }
