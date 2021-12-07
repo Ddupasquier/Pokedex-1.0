@@ -1,1 +1,34 @@
+html, body {
+    margin: 0;
+    height: 100%;
+}
 
+.container {
+    background-color: rgb(135, 158, 222);
+    display: grid;
+    grid-template-columns: 10em 200px auto;
+    grid-template-rows: 100px auto 100px;
+    gap: 0px;
+    max-width: 100rem;
+    margin: auto;
+    height: 100%;
+}
+
+.box {
+    background-color: brown;
+    border-style: solid;
+    border-color: rgb(0,0,0);
+    border-width: 1px;
+}
+
+.nav {
+    grid-row: auto / span 3;
+}
+
+.header {
+    grid-column: auto / span 2;
+}
+
+.footer {
+    grid-column: auto / span 2;
+}
