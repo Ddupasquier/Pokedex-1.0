@@ -9,7 +9,7 @@ html, body {
     grid-template-columns: 125px auto;
     grid-template-rows: 100px auto 100px;
     gap: 0px;
-    max-width: 100rem;
+    max-width: 45rem;
     margin: auto;
     height: 100%;
 }
