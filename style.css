@@ -3,36 +3,83 @@ html, body {
     height: 100%;
 }
 
-.container {
-    background-color: rgb(135, 158, 222);
+body {
+    background-image: url('https://wallpapercave.com/wp/DRd73IK.jpg');
+    
+    /* ('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQJTWqDf9Lp2ps93v4_DRXKK9vyqa2f9oAZA&usqp=CAU'); */
+}
+
+#container {
     display: grid;
-    grid-template-columns: 125px auto;
-    grid-template-rows: 100px auto 100px;
+    grid-template-columns: 185px auto;
+    grid-template-rows: 100px auto 30px;
     gap: 0px;
-    max-width: 45rem;
+    max-width: 1100px;
     margin: auto;
     height: 100%;
-}
-
-.box {
-    background-color: brown;
-    border-style: solid;
+    background-color: rgb(99, 99, 99, 0.7);
+    /* border-style: solid;
     border-color: rgb(0,0,0);
-    border-width: 1px;
+    border-width: 1px; */
 }
 
-.header {
+#header {
     grid-column: auto / span 3;
+    /* border-style: solid;
+    border-color: rgb(0,0,0);
+    border-width: 1px; */
 }
 
-.main2 {
+#main1 {
+    grid-column: 170px / span 2;
+    /* border-style: solid;
+    border-color: rgb(0,0,0);
+    border-width: 1px; */
+    overflow-y: auto;
+    overflow-x: hidden;
+    text-align: center;
+    padding-left: 0px;
+    margin-left: 0px;
+}
+
+#main1 ul {
+    margin-left: 0px;
+}
+
+#main1 li:hover {
+    font-weight: bold;
+    margin-left: 0px;
+}
+
+#main1 img {
+    max-width: 75px;
+    max-height: 75px;
+}
+
+#main2 {
     grid-column: auto / span 2;
+    overflow: auto;
+    /* border-style: solid;
+    border-color: rgb(0,0,0);
+    border-width: 1px; */
 }
 
-/* .main2 {
+#main2 img {
+    max-height: 95%;
+    max-width: 95%;
+  }
 
-} */
-
-.footer {
+#footer {
     grid-column: auto / span 3;
+    background-color:rgb(48, 48, 48);
+    text-align: center;
+    color: white;
+    padding-top: 7px;
+    /* border-style: solid;
+    border-color: rgb(0,0,0);
+    border-width: 1px; */
 }
+
+/* #footer P {
+    color: white;
+} */
