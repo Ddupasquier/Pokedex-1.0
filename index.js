@@ -133,24 +133,32 @@ function renderdiv3(pokemon) {
 
   //LOCAL STORAGE
   let localStorageData = getLocalPokemonData(currentPokemonId);
-  let likes = localStorage.likes;
+  let likes = localStorageData.likes;
 
   pokeInfo.innerHTML = `
   <h2 id='pokename'>${main3name}</h2> <p id='likes'><b>Likes:</b> ${likes}</p>
   <button id='like' type="button">Like!</button> <button id='dislike' type="button">Dislike...</button>
-  <p><b>Description: <span id='pokemondesc'></span></b></p>
+  <p><b>Description:</b> <span id='pokemondesc'></span></p>
   <p><b>Height: </b>${height} Meters</p>
   <p><b>Weight: </b>${weight} lbs</p>
   <p><b>Type:</b><br>${types}</p>
   <div id='formdiv'>
   <form id='pokeform'>
-  <input id='comments' type='text' placeholder='Leave A Comment!!!!'>
+  <input id='comments' type='text' name='comments' placeholder='Leave A Comment!!!!'>
   <input id='submit' type='submit' name='name' value='Submit' class='invert'>
   </form>
   <div id='commentContainer'></div>
   </div>
-  <div id='main3comment'></div>
+  <div id='main3comment'><ul id='commentUL'></ul></div>
     `;
+
+  //write create li element inside of for each
+  const commentUL = document.querySelector("#commentUL");
+  localStorageData.comments.forEach((comment) => {
+    const x = document.createElement("span");
+    commentUL.append(x);
+    x.innerHTML = `- ${comment.text}<br>`
+  });
 
   const like = document.querySelector("#like");
   const dislike = document.querySelector("#dislike");
@@ -159,14 +167,13 @@ function renderdiv3(pokemon) {
 
   like.addEventListener("click", () => {
     likes += 1;
-    likeCount.innerText = `Likes: ${likes}`;
-
+    likeCount.innerHTML = `<b>Likes:</b> ${likes}`;
     Object.assign(localStorageData, { likes: likes });
     localStorage.setItem(currentPokemonId, JSON.stringify(localStorageData));
   });
   dislike.addEventListener("click", () => {
     likes -= 1;
-    likeCount.innerText = `Likes: ${likes}`;
+    likeCount.innerHTML = `<b>Likes:</b> ${likes}`;
     Object.assign(localStorageData, { likes: likes });
     localStorage.setItem(currentPokemonId, JSON.stringify(localStorageData));
   });
@@ -174,16 +181,14 @@ function renderdiv3(pokemon) {
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const main3comment = document.querySelector("#main3comment");
-    const newComment = form[0].value;
-
+    const newComment = form.comments.value;
     Object.assign(localStorageData, {
       comments: [...localStorageData.comments, { text: newComment }],
     });
     localStorage.setItem(currentPokemonId, JSON.stringify(localStorageData));
-
-    const p = document.createElement("p");
-    p.textContent = newComment;
-    main3comment.append(p);
+    const x = document.createElement("span");
+    x.innerHTML = `- ${newComment}<br>`
+    main3comment.prepend(x);
     form.reset();
   });
 }
