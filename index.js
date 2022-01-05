@@ -1,7 +1,5 @@
-///// Make a form which allows to users to make a comment on each pokemon
-/// Add buttons to main2 which allow you to switch back and forth between pokemon
-// Maybe try and style scroll bars to be nicer looking
-
+// make likes and comments that render and update for EACH pokemon
+//look up nesting data in local server
 
 const typeIcons = {
   bug: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Pok%C3%A9mon_Bug_Type_Icon.svg/240px-Pok%C3%A9mon_Bug_Type_Icon.svg.png",
@@ -36,12 +34,22 @@ const typeIcons = {
   water:
     "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Pok%C3%A9mon_Water_Type_Icon.svg/120px-Pok%C3%A9mon_Water_Type_Icon.svg.png",
 };
-
 const nav = document.querySelector("#main1");
 const mainCont = document.querySelector("#main2");
 const pokeInfo = document.querySelector("#main3");
 
+let fullPokemonArray = [];
+let currentPokemonId = 0;
 
+function getLocalPokemonData(id) {
+  let tempData = localStorage.getItem(id);
+  return tempData == null
+    ? (tempData = {
+        likes: 0,
+        comments: [],
+      })
+    : (tempData = JSON.parse(tempData));
+}
 
 function fetchKantoPokemon() {
   fetch("https://pokeapi.co/api/v2/pokemon?limit=151")
@@ -51,25 +59,29 @@ function fetchKantoPokemon() {
         return fetch(pokemon.url).then((res) => res.json());
       });
       Promise.all(pokemonPromises).then((allPokemons) => {
-        allPokemons.forEach((pokemonData) => {
-          renderOnePokemon(pokemonData);
+        fullPokemonArray = allPokemons;
+        allPokemons.forEach((pokemon) => {
+          renderOnePokemon(pokemon);
         });
       });
     });
 }
 
-// function fetchSpecies(pokemon) {
-//   fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemon.name}`)
-//     .then((res) => res.json())
-//     .then((pokemonSpecies) => {
-//   console.log(pokemonSpecies)
-// })
-// }
+function fetchSpecies(pokemon) {
+  fetch(pokemon.species.url)
+    .then((res) => res.json())
+    .then((pokemonSpecies) => {
+      const desc = document.querySelector("#pokemondesc");
+      desc.append(
+        pokemonSpecies.flavor_text_entries[Math.floor(Math.random() * 16)]
+          .flavor_text
+      );
+    });
+}
 
 function renderOnePokemon(pokemon) {
   const navp = document.createElement("p");
-  navp.textContent =
-    pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
+  navp.textContent = toTitleCase(pokemon.name);
   const img = document.createElement("img");
   const hover = (img.src =
     pokemon.sprites["versions"]["generation-v"][
@@ -82,12 +94,9 @@ function renderOnePokemon(pokemon) {
   const main1div = document.createElement("div");
   main1div.setAttribute("id", pokemon.name);
   main1div.setAttribute("class", "navDiv");
-
   nav.append(main1div);
   main1div.append(navp, img);
-
-  // CLICK EVENT
-  img.addEventListener("click", () => renderToMain2and3(pokemon));
+  img.addEventListener("click", () => changePokemon(pokemon.id - 1));
   img.onmouseover = () => {
     img.src = hover;
   };
@@ -105,50 +114,103 @@ function typeImage(typeName) {
   return `<img src='${icon}'>`;
 }
 
-function renderToMain2and3(pokemon) {
+function renderdiv2(pokemon) {
+  const imgMain = document.createElement("img");
+  imgMain.src = pokemon.sprites.other["official-artwork"].front_default;
+  mainCont.innerHTML = `<div id='buttonContainer'><button id='backward' onclick="goBack()"><</button> <button id='forward' onclick='goForward()'>></button></div>`;
+  mainCont.append(imgMain);
+}
+
+function renderdiv3(pokemon) {
+  const main3name = toTitleCase(pokemon.species.name);
   const height = pokemon.height / 10;
+  const weight = pokemon.weight;
   let types = "";
   pokemon.types.forEach(
     (type) =>
       (types += `<span class='poketype'>${typeImage(type.type.name)} </span>`)
   );
-  const main3name = pokemon.species.name.charAt(0).toUpperCase() + pokemon.species.name.slice(1);
-  const weight = pokemon.weight;
-  const imgMain = document.createElement("img");
-  imgMain.src = pokemon.sprites.other["official-artwork"].front_default;
-  mainCont.innerHTML = "";
-  mainCont.append(imgMain);
-  let likes = 0;
+
+  //LOCAL STORAGE
+  let localStorageData = getLocalPokemonData(currentPokemonId);
+  let likes = localStorage.likes;
+
   pokeInfo.innerHTML = `
-    <h2 id='pokename'>${main3name}</h2> <p id='likes'><b>Likes:</b> 0</p>
-    <button id='like' type="button">Like!</button> <button id='dislike' type="button">Dislike...</button>
-    <p><b>Description: </b></p>
-    <p><b>Height: </b>${height} Meters</p>
-    <p><b>Weight: </b>${weight} lbs</p>
-    <p><b>Type:</b><br>${types}</p>
-    <div id='formdiv'>
-    <form id='pokeform'>
-    <input id='comments' type='text' placeholder='Tell us how you feel about this pokemon!'>
-    <input id='submit' type='submit' name='name' value='Submit'>
-    </form>
-    </div>
-  `;
+  <h2 id='pokename'>${main3name}</h2> <p id='likes'><b>Likes:</b> ${likes}</p>
+  <button id='like' type="button">Like!</button> <button id='dislike' type="button">Dislike...</button>
+  <p><b>Description: <span id='pokemondesc'></span></b></p>
+  <p><b>Height: </b>${height} Meters</p>
+  <p><b>Weight: </b>${weight} lbs</p>
+  <p><b>Type:</b><br>${types}</p>
+  <div id='formdiv'>
+  <form id='pokeform'>
+  <input id='comments' type='text' placeholder='Leave A Comment!!!!'>
+  <input id='submit' type='submit' name='name' value='Submit' class='invert'>
+  </form>
+  <div id='commentContainer'></div>
+  </div>
+  <div id='main3comment'></div>
+    `;
+
   const like = document.querySelector("#like");
   const dislike = document.querySelector("#dislike");
   const likeCount = document.querySelector("#likes");
-  const form = document.querySelector('#comments')
+  const form = document.querySelector("#pokeform");
 
   like.addEventListener("click", () => {
     likes += 1;
     likeCount.innerText = `Likes: ${likes}`;
+
+    Object.assign(localStorageData, { likes: likes });
+    localStorage.setItem(currentPokemonId, JSON.stringify(localStorageData));
   });
   dislike.addEventListener("click", () => {
     likes -= 1;
     likeCount.innerText = `Likes: ${likes}`;
+    Object.assign(localStorageData, { likes: likes });
+    localStorage.setItem(currentPokemonId, JSON.stringify(localStorageData));
   });
 
-  // fetchSpecies(pokemon);
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const main3comment = document.querySelector("#main3comment");
+    const newComment = form[0].value;
+
+    Object.assign(localStorageData, {
+      comments: [...localStorageData.comments, { text: newComment }],
+    });
+    localStorage.setItem(currentPokemonId, JSON.stringify(localStorageData));
+
+    const p = document.createElement("p");
+    p.textContent = newComment;
+    main3comment.append(p);
+    form.reset();
+  });
 }
 
+function changePokemon(id) {
+  if (id < 0) {
+    currentPokemonId = fullPokemonArray.length - 1;
+  } else if (id > fullPokemonArray.length - 1) {
+    currentPokemonId = 0;
+  } else {
+    currentPokemonId = id;
+  }
+  renderToMain2and3(fullPokemonArray[currentPokemonId]);
+}
 
-fetchKantoPokemon()
+function renderToMain2and3(pokemon) {
+  renderdiv2(pokemon);
+  renderdiv3(pokemon);
+  fetchSpecies(pokemon);
+}
+
+fetchKantoPokemon();
+
+function goBack() {
+  changePokemon(currentPokemonId - 1);
+}
+
+function goForward() {
+  changePokemon(currentPokemonId + 1);
+}
