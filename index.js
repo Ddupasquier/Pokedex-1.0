@@ -1,6 +1,3 @@
-// make likes and comments that render and update for EACH pokemon
-//look up nesting data in local server
-
 const typeIcons = {
   bug: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Pok%C3%A9mon_Bug_Type_Icon.svg/240px-Pok%C3%A9mon_Bug_Type_Icon.svg.png",
   dark: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Pok%C3%A9mon_Dark_Type_Icon.svg/240px-Pok%C3%A9mon_Dark_Type_Icon.svg.png",
@@ -145,7 +142,7 @@ function renderdiv3(pokemon) {
   <div id='formdiv'>
   <form id='pokeform'>
   <input id='comments' type='text' name='comments' placeholder='Leave A Comment!!!!'>
-  <input id='submit' type='submit' name='name' value='Submit' class='invert'>
+  <input id='submit' type='submit' value='Submit' class='invert'>
   </form>
   <div id='commentContainer'></div>
   </div>
