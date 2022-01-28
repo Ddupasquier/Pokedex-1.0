@@ -1,11 +1,12 @@
 .container {
     display: flex;
+    fill:chartreuse;
+    stroke:cyan;
 }
 
 #container > * {
     padding: 1rem;
-    fill:chartreuse;
-    stroke:cyan;
+    
   }
   
   #main1 {

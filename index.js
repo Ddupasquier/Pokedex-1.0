@@ -52,7 +52,7 @@ function fetchKantoPokemon() {
   fetch("https://pokeapi.co/api/v2/pokemon?limit=151")
     .then((res) => res.json())
     .then((pokemonData) => {
-      const pokemonPromises = pokemonData.results.map((pokemon) => {
+      const pokemonPromises = pokemonData.results.map(pokemon => {
         return fetch(pokemon.url).then((res) => res.json());
       });
       Promise.all(pokemonPromises).then((allPokemons) => {

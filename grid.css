@@ -15,9 +15,9 @@ body {
   grid-template-columns: 185px auto 280px;
   grid-template-rows: 25px auto auto;
   gap: 0px;
-  max-width: 955px;
+  max-width: 75%;
   margin: auto;
-  height: 565px;
+  height: 100%;
   background-color: rgb(99, 99, 99, 0.7);
 }
 
@@ -51,7 +51,7 @@ body {
 
 #main2 img {
   max-height: 95%;
-  max-width: 95%;
+  width: 95%;
 }
 
 #buttonContainer {
