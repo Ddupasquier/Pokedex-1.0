@@ -4,7 +4,7 @@ This **PokeDex** app was created for my phase 1 project for Flatiron School. It 
 
 ## Demo
 
-<!-- [Live](https://simplestyles.herokuapp.com/) -->
+[Live](https://pokedex-fi.herokuapp.com/)
 ## Tech Stack
 
 Vanilla JavaScript<br>
