@@ -49,10 +49,10 @@ function getLocalPokemonData(id) {
 }
 
 function fetchKantoPokemon() {
-  fetch("https://pokeapi.co/api/v2/pokemon?limit=151")
+  fetch("https://pokeapi.co/api/v2/pokemon?limit=150")
     .then((res) => res.json())
     .then((pokemonData) => {
-      const pokemonPromises = pokemonData.results.map(pokemon => {
+      const pokemonPromises = pokemonData.results.map((pokemon) => {
         return fetch(pokemon.url).then((res) => res.json());
       });
       Promise.all(pokemonPromises).then((allPokemons) => {
@@ -154,7 +154,7 @@ function renderdiv3(pokemon) {
   localStorageData.comments.forEach((comment) => {
     const x = document.createElement("span");
     commentUL.append(x);
-    x.innerHTML = `- ${comment.text}<br>`
+    x.innerHTML = `- ${comment.text}<br>`;
   });
 
   const like = document.querySelector("#like");
@@ -184,7 +184,7 @@ function renderdiv3(pokemon) {
     });
     localStorage.setItem(currentPokemonId, JSON.stringify(localStorageData));
     const x = document.createElement("span");
-    x.innerHTML = `- ${newComment}<br>`
+    x.innerHTML = `- ${newComment}<br>`;
     main3comment.prepend(x);
     form.reset();
   });
